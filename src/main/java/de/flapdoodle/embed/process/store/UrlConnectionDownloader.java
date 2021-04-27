@@ -41,11 +41,15 @@ import de.flapdoodle.embed.process.distribution.Distribution;
 import de.flapdoodle.embed.process.io.directories.PropertyOrPlatformTempDir;
 import de.flapdoodle.embed.process.io.file.Files;
 import de.flapdoodle.embed.process.io.progress.ProgressListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for downloading runtime
  */
 public class UrlConnectionDownloader implements Downloader {
+
+	private static final Logger LOG = LoggerFactory.getLogger(UrlConnectionDownloader.class);
 
 	private static final int DEFAULT_CONTENT_LENGTH = 20 * 1024 * 1024;
 	private static final int BUFFER_LENGTH = 1024 * 8 * 8;
@@ -110,7 +114,9 @@ public class UrlConnectionDownloader implements Downloader {
 	private InputStreamAndLength downloadInputStream(DownloadConfig downloadConfig, Distribution distribution)
 			throws IOException {
 		URL url = new URL(getDownloadUrl(downloadConfig, distribution));
-		
+
+		LOG.info("Going to download: {}", url);
+
 		Optional<Proxy> proxy = downloadConfig.proxyFactory().map(ProxyFactory::createProxy);
 		
 		try {
